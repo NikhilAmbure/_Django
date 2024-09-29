@@ -1,0 +1,1 @@
+print(f"Thread name is {threading.current_thread().name} with id - {threading.get_ident()}")

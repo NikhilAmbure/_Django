@@ -13,6 +13,14 @@
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus repudiandae nulla dolorum quo rem ad ducimus aspernatur impedit deleniti nisi.
     </p>
 
+    <p>{{names}}</p>            
+
+    {% for name in names %}
+    <h3>{{name}}</h3>
+    {% endfor %}
+
+    {{fruits|default: "No value"}}  
+
     <a href="/contact/">Contact</a>
 </body>
 </html>

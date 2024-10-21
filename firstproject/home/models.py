@@ -30,15 +30,26 @@ class Book(models.Model):
 # Foreign Key (OneToMany)
 class Brand(models.Model):
     brand_name = models.CharField(max_length=100)
+    country = models.CharField(max_length=100, default='IN')
+
+    # Dunder str method
+    def __str__(self):
+        return self.brand_name  
+    # Prints like this 
+    # <QuerySet [<Brand: Jps>, <Brand: TCS>]>
 
 class Products(models.Model):
-    brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
+    # brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
+    brand = models.ForeignKey(Brand, on_delete=models.SET_NULL, null=True, blank=True)
     product_name = models.CharField(max_length=100)
 
 
 # ManyToMany
 class Skills(models.Model):
     skill_name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.skill_name
 
 class Person(models.Model):
     person_name = models.CharField(max_length=100)

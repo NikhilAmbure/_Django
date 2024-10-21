@@ -54,3 +54,8 @@ class Skills(models.Model):
 class Person(models.Model):
     person_name = models.CharField(max_length=100)
     skill = models.ManyToManyField(Skills)
+
+
+class Student2(models.Model):
+    name = models.CharField(max_length=100)
+    age = models.IntegerField()

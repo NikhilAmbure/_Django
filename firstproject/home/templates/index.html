@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block start %}
-    <h1>
+    <!-- <h1>
         Hello Client !!
     </h1>
     <p>
@@ -17,5 +17,15 @@
     {{ names | length }}
 
     <a href="/contact/">Contact</a>
-    <a href="/about/">About</a>
+    <a href="/about/">About</a> -->
+
+
+    <!-- Django Forms -->
+
+    <form method="post">
+        {% csrf_token %}
+        {{form.as_p}}
+        <button type="submit">Submit</button>
+    </form>
+    
 {% endblock %}

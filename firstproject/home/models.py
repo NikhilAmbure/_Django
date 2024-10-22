@@ -8,12 +8,12 @@ class Student(models.Model):
     email = models.EmailField()
     gender = models.CharField(max_length=10, choices=gender_choices, default='Male')
     age = models.IntegerField(null=True, blank=True)
-    date_of_birth = models.DateField()
-    profile_img = models.ImageField(null=True, blank=True, upload_to="student")
-    file = models.FileField(upload_to="files")
+    # date_of_birth = models.DateField()
+    # profile_img = models.ImageField(null=True, blank=True, upload_to="student")
+    # file = models.FileField(upload_to="files")
     student_bio = models.TextField()
-    created_at = models.DateTimeField(auto_created=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
+    # created_at = models.DateTimeField(auto_created=True)
+    # updated_at = models.DateTimeField(auto_now_add=True)
 
 
 # Relationships
@@ -59,3 +59,5 @@ class Person(models.Model):
 class Student2(models.Model):
     name = models.CharField(max_length=100)
     age = models.IntegerField()
+    gender = models.CharField(max_length=100, null=True, blank=True)
+    file = models.FileField(upload_to="files/", null=True, blank=True)

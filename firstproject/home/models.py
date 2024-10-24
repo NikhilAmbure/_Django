@@ -1,10 +1,16 @@
 from django.db import models
 
 # Create your models here.
+
+class College(models.Model):
+    college_name = models.CharField(max_length=100)
+    college_address = models.CharField(max_length=100)
+
 class Student(models.Model):
+    college = models.ForeignKey(College, on_delete=models.CASCADE, null=True, blank=True)
     gender_choices = (('Male','Male'), ('female', 'female'))
     name = models.CharField(max_length=100)
-    mobile_number = models.CharField(max_length=12)
+    mobile_number = models.CharField(max_length=20)
     email = models.EmailField()
     gender = models.CharField(max_length=10, choices=gender_choices, default='Male')
     age = models.IntegerField(null=True, blank=True)

@@ -7,12 +7,14 @@ import random
 
 fake = Faker('en_IN')
 
+# For college fake data
 # def dbSeeder(records = 10)->None:
 #     college_names = ['IIT Madras', 'VIT Pune', 'IISc Banglore', 'IIT Bombay', 'DY', 'IIT Ropar', 'NIT', 'IIIT', 'JSPM']
 #     for i in college_names:
 #         address = fake.address()
 #         College.objects.create(college_name = i, college_address=address)
 
+# For fake data in Student table
 def dbSeeder(records = 10)->None:
     colleges = College.objects.all()
 

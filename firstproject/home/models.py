@@ -30,7 +30,9 @@ class Author(models.Model):
 
 class Book(models.Model):
     author = models.OneToOneField(Author, on_delete=models.CASCADE)
-    book_name = models.CharField(max_length=100)
+    book_name = models.CharField(max_length=255)
+    published_date = models.DateField()
+    price = models.DecimalField(max_digits=6, decimal_places=2)
 
 
 # Foreign Key (OneToMany)

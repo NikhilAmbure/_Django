@@ -1,0 +1,10 @@
+1. Total number of Books
+2. Avg, sum, min, max price of all Books
+3. Total books written by each author
+4. avg price of books for each author
+5. total and avg price of books for each author
+6. total no of books published in 2023 for each author
+7. Most expensive book of each author
+8. Authors with at least one book priced over $50
+9. Total earnings for each author
+10. Combining multiple aggregations

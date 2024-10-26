@@ -66,15 +66,14 @@ from django.db.models import Avg, Sum, Min, Max, Count, Q
 # handle()
 
 # 7
-def handle():
-    authors = Author.objects.annotate(
-        expensive_book = Max('book__price')
-    )
+# def handle():
+    # authors = Author.objects.annotate(
+        # expensive_book = Max('book__price')
+    # )
 
-    for author in authors:
-        print(f"Author name {author.author_name} expensive book is {author.expensive_book}")
-handle()
-
+    # for author in authors:
+        # print(f"Author name {author.author_name} expensive book is {author.expensive_book}")
+# handle()
 
 
 # 8
@@ -107,4 +106,21 @@ handle()
 
     # for author in authors:
         # print(f"author name {author.author_name} Total earnings {author.total_earnings} book count {author.book_count}")
+# handle()
+
+# 11
+# def handle():
+    # books = Book.objects.annotate(avg_price = Avg('price', filter=Q(published_date__year = 2023)))
+    # for book in books:
+        # print(f"Book name {book.book_name} avg price in 2023 = {book.avg_price}")
+# handle()
+
+# 12
+# def handle():
+    # authors = Author.objects.annotate(latest_publication_date= Max('book__published_date'))
+    # authors = Author.objects.annotate(earliest_publication_date= Min('book__published_date'))
+
+    # for author in authors:
+        # print(f"{author.author_name} - Latest published book {author.latest_publication_date}")
+        # print(f"{author.author_name} - Earliest published book {author.earliest_publication_date}")
 # handle()

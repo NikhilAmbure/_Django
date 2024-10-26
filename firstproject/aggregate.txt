@@ -8,3 +8,9 @@
 8. Authors with at least one book priced over $50
 9. Total earnings for each author
 10. Combining multiple aggregations
+
+
+# Practice 
+11. Find the average price of books published in a specific year.
+12. Annotate each author with the latest publication date or earliest published date among their books.
+13. 

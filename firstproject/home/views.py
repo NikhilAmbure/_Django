@@ -43,6 +43,9 @@ def index(request):
         print(request.method)
     return render(request, 'index.html', context)
 
+def thank_you(request):
+    return HttpResponse('Thank You. Your response is recorded.')
+
 def contact(request):
     return render(request, 'contact.html')
 
@@ -52,8 +55,6 @@ def about(request):
 def dynamic_route(request, number):
     return HttpResponse(f"Dynamic route by number {number}")
 
-def thank_you(request):
-    return HttpResponse('Thank You. Your response is recorded.')
 
 # Django Lookups
 def search_page(request):

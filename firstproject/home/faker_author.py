@@ -42,7 +42,7 @@ def generate_fake_data(num_authors, num_books_per_author):
 
 # Usage
 
-num_authors = 10  # Number of fake authors
-num_books_per_author = 5  # Number of fake books per author
+num_authors = 50  # Number of fake authors
+num_books_per_author = 10  # Number of fake books per author
 generate_fake_data(num_authors, num_books_per_author)
 print("Fake data generated successfully!")

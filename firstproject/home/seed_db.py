@@ -14,6 +14,8 @@ fake = Faker('en_IN')
 #         address = fake.address()
 #         College.objects.create(college_name = i, college_address=address)
 
+
+
 # For fake data in Student table
 def dbSeeder(records = 10)->None:
     colleges = College.objects.all()

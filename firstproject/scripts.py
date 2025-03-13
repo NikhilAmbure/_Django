@@ -15,16 +15,18 @@ from django.db.models import Avg, Sum, Min, Max, Count, Q
 # Aggregate functions
 # 1
 # def handle():
-    # book = Book.objects.count()
-    # print(book)
+#     book = Book.objects.count()
+#     print(book)
+# handle()
 
 # 2 -> Avg, Sum, min, max
-# def handle():
-    # book = Book.objects.aggregate(Price = Avg('price'))
-    # book = Book.objects.aggregate(Price = Sum('price'))
-    # book = Book.objects.aggregate(Price = Min('price'))
-    # book = Book.objects.aggregate(Price = Max('price'))
-    # print(book)
+def handle():
+    book = Book.objects.aggregate(Price = Avg('price'))
+    book = Book.objects.aggregate(Price = Sum('price'))
+    book = Book.objects.aggregate(Price = Min('price'))
+    book = Book.objects.aggregate(Price = Max('price'))
+    print(book)
+handle()
 
 # Annotate
 # 3

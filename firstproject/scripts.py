@@ -1,4 +1,5 @@
 import os
+from itertools import product
 
 import django
 import itertools
@@ -11,6 +12,8 @@ from faker import Faker
 from home.models import Author, Book
 from datetime import datetime, timedelta
 from django.db.models import Avg, Sum, Min, Max, Count, Q
+from django.db.models import Subquery, OuterRef
+from home.models import Products, Brand
 
 # Aggregate functions
 # 1
@@ -20,13 +23,13 @@ from django.db.models import Avg, Sum, Min, Max, Count, Q
 # handle()
 
 # 2 -> Avg, Sum, min, max
-def handle():
-    book = Book.objects.aggregate(Price = Avg('price'))
-    book = Book.objects.aggregate(Price = Sum('price'))
-    book = Book.objects.aggregate(Price = Min('price'))
-    book = Book.objects.aggregate(Price = Max('price'))
-    print(book)
-handle()
+# def handle():
+#     book = Book.objects.aggregate(Price = Avg('price'))
+#     book = Book.objects.aggregate(Price = Sum('price'))
+#     book = Book.objects.aggregate(Price = Min('price'))
+#     book = Book.objects.aggregate(Price = Max('price'))
+#     print(book)
+# handle()
 
 # Annotate
 # 3
@@ -126,3 +129,156 @@ handle()
         # print(f"{author.author_name} - Latest published book {author.latest_publication_date}")
         # print(f"{author.author_name} - Earliest published book {author.earliest_publication_date}")
 # handle()
+
+
+# Subqueries
+# 1
+# def handle():
+#
+#     book = Book.objects.filter(
+#         author = OuterRef('id')
+#     ).order_by('-published_date').values('book_name')[:1]
+#
+#     authors = Author.objects.annotate(books = Subquery(book))
+#
+#     for author in authors:
+#         # print(vars(author))
+#         print(f"Author name is {author.author_name} and books {author.books}")
+# handle()
+
+# 2
+# def handle():
+#
+#     book = Book.objects.filter(
+#         author = OuterRef('id'),
+#         published_date__year = 2023
+#     ).values('author').annotate(total_price = Sum('price')).values('total_price')
+#
+#     authors = Author.objects.annotate(totaL_price_for_book = Subquery(book))
+#
+#     for author in authors:
+#         # print(vars(author))
+#         print(f"Author name is {author.author_name} and books {author.totaL_price_for_book}")
+# handle()
+
+# 3
+# def handle():
+#
+#     book = Book.objects.filter(
+#         author = OuterRef('id')
+#     ).values('author').annotate(book_count = Count('id')).values('book_count')
+#
+#     authors = Author.objects.annotate(book_count = Subquery(book))
+#
+#     for author in authors:
+#         # print(vars(author))
+#         print(f"Author name is {author.author_name} and books {author.book_count}")
+# handle()
+
+# 4
+# def handle():
+#
+#     book = Book.objects.filter(
+#         author = OuterRef('id'),
+#     ).values('author').annotate(avg_price = Avg('price')).values('avg_price')
+#
+#     authors = Author.objects.annotate(avg_price = Subquery(book))
+#
+#     for author in authors:
+#         # print(vars(author))
+#         print(f"Author name is {author.author_name} and books {author.avg_price}")
+# handle()
+
+# 5
+# def handle():
+#
+#     book = Book.objects.filter(
+#         author = OuterRef('id')
+#     ).values('author').order_by('-price').values('price')[:1]
+#
+#     authors = Author.objects.annotate(book_price = Subquery(book))
+#
+#     for author in authors:
+#         # print(vars(author))
+#         print(f"Author name is {author.author_name} and books {author.book_price}")
+# handle()
+
+# 6
+# def handle():
+#
+#     book = Book.objects.filter(
+#         author = OuterRef('id'),
+#         price__gte = 50
+#     ).values('id')[:1]
+#
+#     authors = Author.objects.annotate(id__in = Subquery(book.values('author')))
+#
+#     for author in authors:
+#         print(author.author_name)
+#         # print(vars(author))
+#         # print(f"Author name is {author.author_name} and books {author.book_price}")
+# handle()
+
+# 7
+# def handle():
+#
+#     book = Book.objects.filter(
+#         author = OuterRef('id'),
+#         price__gte = 50
+#     ).values('author').annotate(earning = Sum('price')).values('earning')
+#
+#     authors = Author.objects.annotate(Total_earning = Subquery(book))
+#
+#     for author in authors:
+#         # print(vars(author))
+#         print(f"Author name is {author.author_name} and books {author.Total_earning}")
+# handle()
+
+# 8
+# def handle():
+#
+#     book = Book.objects.filter(
+#         author = OuterRef('id'),
+#         published_date__year__gte = 2023
+#     ).values('author').annotate(avg_price = Avg('price')).values('avg_price')
+#
+#     authors = Author.objects.annotate(avg_p = Subquery(book))
+#
+#     for author in authors:
+#         # print(vars(author))
+#         print(f"Author name is {author.author_name} and books {author.avg_p}")
+# handle()
+
+# 9
+# def handle():
+#
+#     book = Book.objects.filter(
+#         author = OuterRef('id'),
+#         published_date__year = 2023
+#     ).values('author').annotate(book_price = Max('price')).values('book_price')\
+#
+#     authors = Author.objects.annotate(book_price = Subquery(book))
+#
+#     for author in authors:
+#         # print(vars(author))
+#         print(f"Author name is {author.author_name} and books {author.book_price}")
+# handle()
+
+# 10 --> Complex query
+# def handle():
+#
+#     book = Book.objects.filter(
+#         author = OuterRef('id'),
+#         price__gte = 50
+#     ).values('author').annotate(earning = Sum('price')).values('earning')
+#
+#     authors = Author.objects.annotate(Total_earning = Subquery(book))
+#
+#     for author in authors:
+#         # print(vars(author))
+#         print(f"Author name is {author.author_name} and books {author.Total_earning}")
+# handle()
+
+
+# Over-riding save method
+Products.objects.create(brand = Brand.objects.first(), product_name = 'Laptop with mouse razer')

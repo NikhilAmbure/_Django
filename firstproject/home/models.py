@@ -1,4 +1,10 @@
+from itertools import product
+
 from django.db import models
+from django.template.defaultfilters import slugify
+
+from home.utils import generateSlug
+
 
 # Create your models here.
 
@@ -28,6 +34,9 @@ class Student(models.Model):
 class Author(models.Model):
     author_name = models.CharField(max_length=100)
 
+    def __str__(self):
+        return self.author_name
+
 class Book(models.Model):
     author = models.OneToOneField(Author, on_delete=models.CASCADE)
     book_name = models.CharField(max_length=255)
@@ -50,7 +59,15 @@ class Products(models.Model):
     # brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
     brand = models.ForeignKey(Brand, on_delete=models.SET_NULL, null=True, blank=True)
     product_name = models.CharField(max_length=100)
+    slug = models.SlugField(max_length=100, blank=True, null=True)
 
+    # overriding save() method
+    def save(self, *args, **kwargs) -> None:
+        # print("Called")
+        # To generate unique slug for same product name
+        if not self.id:
+            self.slug = generateSlug(self.product_name, Products)
+        return super().save(*args, **kwargs)
 
 # ManyToMany
 class Skills(models.Model):

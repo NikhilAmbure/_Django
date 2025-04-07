@@ -281,4 +281,4 @@ from home.models import Products, Brand
 
 
 # Over-riding save method
-Products.objects.create(brand = Brand.objects.first(), product_name = 'Laptop with mouse razer')
+# Products.objects.create(brand = Brand.objects.first(), product_name = 'Laptop with mouse razer')

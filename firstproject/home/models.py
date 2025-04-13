@@ -43,6 +43,9 @@ class Book(models.Model):
     published_date = models.DateField()
     price = models.DecimalField(max_digits=6, decimal_places=2)
 
+    class Meta:
+        db_table = 'book'
+
 
 # Foreign Key (OneToMany)
 class Brand(models.Model):

@@ -9,7 +9,7 @@ django.setup()
 import django
 import random
 from faker import Faker
-from home.models import Author, Book
+from home.models import Author, Book, Person
 from datetime import datetime, timedelta
 from django.db.models import Avg, Sum, Min, Max, Count, Q
 from django.db.models import Subquery, OuterRef
@@ -282,3 +282,30 @@ from home.models import Products, Brand
 
 # Over-riding save method
 # Products.objects.create(brand = Brand.objects.first(), product_name = 'Laptop with mouse razer')
+
+
+# bulk_create
+fake = Faker()
+
+def createPerson(number):
+    create  = [Person(person_name = fake.name()) for _ in range(number)]
+    # print(create)
+    Person.objects.bulk_create(create)
+
+
+# bulk_delete
+# def deletePerson(number):
+    # for _ in range(number):
+    #     person = Person.objects.first().delete()
+
+    # or
+    # Person.objects.all().delete()
+# createPerson(1000)
+# deletePerson(30)
+
+# bulk_update
+def updatePerson(name):
+    print(Person.objects.filter(person_name__icontains = name).count())
+    print(Person.objects.filter(person_name__icontains = name).update(person_name = 'Nick'))
+
+updatePerson('davis')

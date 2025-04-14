@@ -1,9 +1,12 @@
 import os
 from itertools import product
-
+from home.models import *
 import django
 import itertools
 import os
+
+
+
 os.environ['DJANGO_SETTINGS_MODULE'] = 'firstproject.settings'
 django.setup()
 import django
@@ -14,6 +17,7 @@ from datetime import datetime, timedelta
 from django.db.models import Avg, Sum, Min, Max, Count, Q
 from django.db.models import Subquery, OuterRef
 from home.models import Products, Brand
+from firstproject.home.models import Student2
 
 # Aggregate functions
 # 1
@@ -285,12 +289,12 @@ from home.models import Products, Brand
 
 
 # bulk_create
-fake = Faker()
+# fake = Faker()
 
-def createPerson(number):
-    create  = [Person(person_name = fake.name()) for _ in range(number)]
+# def createPerson(number):
+#     create  = [Person(person_name = fake.name()) for _ in range(number)]
     # print(create)
-    Person.objects.bulk_create(create)
+    # Person.objects.bulk_create(create)
 
 
 # bulk_delete
@@ -304,8 +308,13 @@ def createPerson(number):
 # deletePerson(30)
 
 # bulk_update
-def updatePerson(name):
-    print(Person.objects.filter(person_name__icontains = name).count())
-    print(Person.objects.filter(person_name__icontains = name).update(person_name = 'Nick'))
+# def updatePerson(name):
+#     print(Person.objects.filter(person_name__icontains = name).count())
+#     print(Person.objects.filter(person_name__icontains = name).update(person_name = 'Nick'))
 
-updatePerson('davis')
+# updatePerson('davis'
+
+
+# Brand.objects.create(brand_name = 'Samsung', country = 'US')
+
+# Student2.objects.create(name='Davis', age=24, gender='Male')

@@ -17,3 +17,7 @@ class Transaction(BaseModel):
 
     class Meta:
         ordering = ('description',)
+
+    # To check whether the transaction is "minus" or "plus" 
+    def isNeg(self):
+        return self.amount < 0

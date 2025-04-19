@@ -28,7 +28,6 @@ for product_data in data['products']:
             description=product_data['description'],
             category=product_data['category'],
             price=product_data['price'],
-            brand=product_data.get('brand'),
             sku=product_data['sku'],
             thumbnail=product_data['thumbnail']
         )

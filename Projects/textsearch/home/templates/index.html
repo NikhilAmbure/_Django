@@ -16,6 +16,24 @@
                         <input type="text" value="{% if search%} {{search}} {% endif %}" name="search" class="form-control" placeholder="Search..." value="">
                     </div>
                 </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <select name="category" class="form-control">
+                            <option value="">Select</option>
+                            {% for category in categories %}
+                            <option  {% if request.GET.category == category.category %} selected {%endif%} value="{{category.category}}">{{category.category}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-4">
+                    <div class="form-group">
+                        <div id="price-slider"></div>
+                        <input type="hidden" name="min_price" id="min-price">
+                        <input type="hidden" name="max_price" id="max-price">   
+                    </div>
+                </div>
 
                 <button type="submit" class="btn btn-primary">Search</button>
 
@@ -56,3 +74,28 @@
             
        
         </form>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.5.0/nouislider.min.js"></script>
+<script>
+       var priceSlider = document.getElementById('price-slider');
+
+        noUiSlider.create(priceSlider, {
+            start: [0, 1000], // Adjust these values to your desired default range
+            connect: true,
+            range: {
+                'min': 0,
+                'max': 1000 // Adjust this value to your maximum price
+            },
+            tooltips: [true, true]
+        });
+
+        priceSlider.noUiSlider.on('update', function(values, handle) {
+            document.getElementById('min-price').value = values[0];
+            document.getElementById('max-price').value = values[1];
+        });
+
+        // Set the initial values if they exist
+        var minPrice = "{{ request.GET.min_price|default:0 }}";
+        var maxPrice = "{{ request.GET.max_price|default:1000 }}";
+        priceSlider.noUiSlider.set([minPrice, maxPrice]);
+</script>

@@ -13,42 +13,46 @@
             <div class="row">
                 <div class="col-4">
                     <div class="form-group">
-                        <input type="text" value="{% if search %}{{search}}{%endif %}" name="search" class="form-control" placeholder="Search..." value="{{ request.GET.q }}">
+                        <input type="text" value="{% if search%} {{search}} {% endif %}" name="search" class="form-control" placeholder="Search..." value="">
                     </div>
                 </div>
-                <div class="col-4">
-                    <div class="form-group">
-                      <select name="brand" class="form-control">
-                        <option value="">Select</option>
-                        {% for brand in brands %}
-                        <option {% if request.GET.brand == brand.brand %} selected {%endif%}value="{{brand.brand}}">{{brand.brand}}</option>
-                        {% endfor %}
-                      </select>
-                    </div>
-                </div>
-                <div class="col-4">
-                    <div class="form-group">
-                      <select name="category" class="form-control">
-                        <option value="">Select</option>
 
-                        {% for category in categories %}
-                        <option  {% if request.GET.category == category.category %} selected {%endif%} value="{{category.category}}">{{category.category}}</option>
-                        {% endfor %}
-                      </select>
-                    </div>
-                </div>
-            </div>
-            <div class="col-4">
-                <div class="form-group">
-             
-            <div id="price-slider"></div>
-            <input type="hidden" name="min_price" id="min-price">
-            <input type="hidden" name="max_price" id="max-price">
-            </div>
-               
-            </div>
+                <button type="submit" class="btn btn-primary">Search</button>
 
+                <br>
+                
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Brand</th>
+                            <th>SKU</th>
+                            <th>Thumbnail</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in results %}
+                            <tr>
+                                <td>{{ product.title }}</td>
+                                <td>{{ product.description }}</td>
+                                <td>{{ product.category }}</td>
+                                <td>${{ product.price }}</td>
+                                <td>{{ product.brand }}</td>
+                                <td>{{ product.sku }}</td>
+                                <td><img src="{{ product.thumbnail }}" alt="{{ product.title }}" width="50"></td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="7">No results found.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
          
-            <button type="submit" class="btn btn-primary">Search</button>
+            
        
         </form>

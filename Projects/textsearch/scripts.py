@@ -22,7 +22,7 @@ data = response.json()
 
 for product_data in data['products']:
     try:
-        print(product_data.get('brand'))
+        # print(product_data.get('brand'))
         product = Product(
             title=product_data['title'],
             description=product_data['description'],

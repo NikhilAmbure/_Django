@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-+h$yj*okx7q8w9^d89z=qfzq&0(lfkzub%@)44=+28046#8cps'
+SECRET_KEY = 'django-insecure-qlo_&br2&2hub$%g4%whc7+49)n8x_$kzf(xjif8(fbdvom3dy'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'djadmin.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'admin',
+        'NAME': 'djadmin',
         'USER': 'postgres',
         'PASSWORD': '1702',
         'HOST': 'localhost',

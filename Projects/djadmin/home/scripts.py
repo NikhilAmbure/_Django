@@ -19,6 +19,7 @@ def handle():
             phone_number=fake.phone_number(),
             address=fake.address(),
         )
+        customer.phone_number = customer.phone_number[:15]
         customer.save()
         customers.append(customer)
 
@@ -33,5 +34,3 @@ def handle():
             status=random.choice(statuses)
         )
         order.save()
-
-handle()

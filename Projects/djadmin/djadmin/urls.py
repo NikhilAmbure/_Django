@@ -2,7 +2,7 @@
 URL configuration for djadmin project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.1/topics/http/urls/
+    https://docs.djangoproject.com/en/5.0/topics/http/urls/
 Examples:
 Function views
     1. Add an import:  from my_app import views
@@ -20,14 +20,15 @@ from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from home.views import *
-
 urlpatterns = [
-    path('grappelli/', include('grappelli.urls')),
-    path('admin/', admin.site.urls),
-    path('', include('home.urls'))
+        path('', index, ),
+        path('customer/', customers),
+        path('create-customer/', create_customer ),
+        path('admin/customer/', customers),
+ 
+   
 ]
 
-# Setup static files
 if settings.DEBUG:
         urlpatterns += static(settings.MEDIA_URL,
                               document_root=settings.MEDIA_ROOT)

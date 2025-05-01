@@ -50,6 +50,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # Add custom middleware
     'DjangoMiddleware.middleware.middleware.IPBlockingMiddleware',  
+    'DjangoMiddleware.middleware.middleware.CheckBMPHeader',  
 ]
 
 ROOT_URLCONF = 'DjangoMiddleware.urls'

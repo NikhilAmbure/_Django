@@ -6,6 +6,8 @@ import random
 from django.http import HttpResponse
 from django.contrib import messages
 
+from django.contrib.auth.decorators import login_required
+
 # Customized user model
 User = get_user_model()
 
@@ -36,6 +38,7 @@ def login_page(request):
     return render(request, 'login.html')
 
 
+
 def check_otp(request, user_id):
     if request.method == 'POST':
         otp = request.POST.get('otp')
@@ -53,5 +56,6 @@ def check_otp(request, user_id):
     return render(request, 'check_otp.html')
 
 
+@login_required(login_url='/login/')
 def dashboard(request):
     return HttpResponse("Logged In successfully.")

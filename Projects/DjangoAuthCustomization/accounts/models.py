@@ -12,6 +12,9 @@ class CustomUser(AbstractUser):
     image = models.ImageField(upload_to="profile")
     is_verified = models.BooleanField(default=False)
 
+    # To store the otp
+    otp = models.IntegerField(default=0)
+
     USERNAME_FIELD = 'phone_number'
     REQUIRED_FIELDS = []
 

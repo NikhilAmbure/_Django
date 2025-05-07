@@ -85,7 +85,7 @@ def LogoutPage(request):
 
 # To protect the routes for individual users.
 # Only authenticated users can access their routes
-# Only specific user with his username and pass can access their data
+# Only specific user with his username and pass can access their data   
 @login_required(login_url='/login/')
 def index(request):
 

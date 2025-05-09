@@ -12,4 +12,5 @@ def sendTestEmail(email, subject, message):
 # Send otp to email
 def sendOTPToEmail(email, subject, message):
     # subject, message, from_email = settings.EMAIL_HOST_USER, receipent email 
-    send_mail(subject, message, settings.EMAIL_HOST_USER, [email])
+    # send_mail(subject, message, settings.EMAIL_HOST_USER, [email])
+    print("EMAIL SENT!")

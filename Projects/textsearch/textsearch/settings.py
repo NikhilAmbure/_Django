@@ -25,6 +25,7 @@ SECRET_KEY = 'django-insecure-wcxbpi*89#*=ohv%pr*m6taynp&l=fxadzab(=#alko34a5_k5
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+
 ALLOWED_HOSTS = []
 
 
@@ -38,11 +39,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.postgres',
-    'home'
+    'home',
+    "debug_toolbar"
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -52,6 +55,15 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'textsearch.urls'
+
+# IPS in which u can perform the testing (debug)
+INTERNAL_IPS = [
+    # ...
+    "127.0.0.1",
+    'localhost',
+    # ...
+]
+
 
 TEMPLATES = [
     {

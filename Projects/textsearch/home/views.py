@@ -3,6 +3,17 @@ from .models import Product
 from django.contrib.postgres.search import (SearchVector, SearchQuery, SearchRank, TrigramSimilarity)
 from django.db.models import Q 
 
+# For individual element/data caching
+from django.core.cache import cache
+
+# For whole page caching
+from django.views.decorators.cache import cache_page
+
+
+
+# For whole page caching
+# For how long it will cache => 1 minute (60 * 1)
+# @cache_page(60 * 1)  # seconds * minutes 
 def index(request):
 
     # FullText Search in django
@@ -70,7 +81,16 @@ def index(request):
             category__icontains = request.GET.get('category')
         ).order_by('price')
 
-    category = Product.objects.all().distinct('category').order_by('category')
+
+    categories = []
+    if cache.get('categories'):
+        # if the data is in cache memory 
+        categories = cache.get('categories')
+    else:
+        # if data is not in cache memory then it retrieves data from database
+        cache.set('categories', Product.objects.all().distinct('category').order_by('category'), 60 * 1)
+
+    # categories = Product.objects.all().distinct('category').order_by('category')
 
     return render(request, 'index.html', {'results': results , 'search': search , 
-                                          'categories': category})
+                                          'categories': categories})

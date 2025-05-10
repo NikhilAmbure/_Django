@@ -126,3 +126,28 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Logging
+import os
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+        # To save the logs into the file (from views)
+        "file" : {
+            "level" : 'ERROR',
+            "class" : 'logging.FileHandler',
+            "filename": os.path.join(BASE_DIR, 'error.log')
+        }
+    },
+    "root": {
+        "handlers": ["console", "file"],
+        # You can change this level
+        "level": "DEBUG",
+    },
+}

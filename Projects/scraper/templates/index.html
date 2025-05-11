@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>News Cards</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+  <div class="max-w-7xl mx-auto py-8 px-4">
+    <div class="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+
+      {% for news in news_data %}
+      <div class="bg-white rounded-xl shadow-md overflow-hidden">
+        <img src="{{ news.image }}" alt="News Image" class="w-full h-60 object-cover">
+        <div class="p-4">
+          <h2 class="text-xl font-bold mb-2">{{ news.title }}</h2>
+          <p class="text-gray-600 mb-4">{{ news.desc | truncatechars:15}}</p>
+          <a href="{{ news.external_link }}" target="_blank"
+             class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+            Read more
+          </a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+</body>
+</html>

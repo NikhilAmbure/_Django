@@ -13,8 +13,6 @@ from django.core.cache import cache
 # Customized user model
 User = get_user_model()
 
-
-
 # Sending an email by logging in with phone number (with extended abstractuser which contains his email)
 def login_page(request):
     if request.method == 'POST':

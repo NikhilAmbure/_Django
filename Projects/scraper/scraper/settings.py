@@ -81,7 +81,14 @@ DATABASES = {
         'USER': 'postgres',
         'PASSWORD': '1702',
         'HOST': 'localhost',
-        'PORT': ''
+        'PORT': '',
+        'CONN_MAX_AGE': None,  # Use persistent connections
+        'OPTIONS': {
+            'connect_timeout': 10,
+        },
+        'TEST': {
+            'NAME': 'test_scraper',
+        },
     }
 }
 
@@ -126,3 +133,12 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Celery
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']    
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'

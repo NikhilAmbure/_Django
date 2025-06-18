@@ -1,0 +1,52 @@
+[2025-06-17 17:38:56,090: CRITICAL/MainProcess] Unrecoverable error: RuntimeError('do not call blocking functions from the mainloop')
+Traceback (most recent call last):
+  File "D:\C\Django Course\env\Lib\site-packages\celery\worker\worker.py", line 203, in start
+    self.blueprint.start(self)
+  File "D:\C\Django Course\env\Lib\site-packages\celery\bootsteps.py", line 116, in start
+    step.start(parent)
+  File "D:\C\Django Course\env\Lib\site-packages\celery\bootsteps.py", line 365, in start
+    return self.obj.start()
+           ^^^^^^^^^^^^^^^^
+  File "D:\C\Django Course\env\Lib\site-packages\celery\worker\consumer\consumer.py", line 341, in start
+    blueprint.start(self)
+  File "D:\C\Django Course\env\Lib\site-packages\celery\bootsteps.py", line 116, in start
+    step.start(parent)
+  File "D:\C\Django Course\env\Lib\site-packages\celery\worker\consumer\consumer.py", line 772, in start
+    c.loop(*c.loop_args())
+  File "D:\C\Django Course\env\Lib\site-packages\celery\worker\loops.py", line 143, in synloop
+    _loop_cycle()
+  File "D:\C\Django Course\env\Lib\site-packages\celery\worker\loops.py", line 132, in _loop_cycle
+    connection.drain_events(timeout=2.0)
+  File "D:\C\Django Course\env\Lib\site-packages\kombu\connection.py", line 341, in drain_events
+    return self.transport.drain_events(self.connection, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\C\Django Course\env\Lib\site-packages\kombu\transport\virtual\base.py", line 997, in drain_events
+    get(self._deliver, timeout=timeout)
+  File "D:\C\Django Course\env\Lib\site-packages\kombu\transport\redis.py", line 595, in get
+    events = self.poller.poll(timeout)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\C\Django Course\env\Lib\site-packages\kombu\utils\eventio.py", line 281, in poll
+    read, write, error = _selectf(
+                         ^^^^^^^^^
+  File "D:\C\Django Course\env\Lib\site-packages\eventlet\green\select.py", line 80, in select
+    return hub.switch()
+           ^^^^^^^^^^^^
+  File "D:\C\Django Course\env\Lib\site-packages\eventlet\hubs\hub.py", line 310, in switch
+    return self.greenlet.switch()
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\C\Django Course\env\Lib\site-packages\eventlet\hubs\hub.py", line 362, in run
+    self.wait(sleep_time)
+  File "D:\C\Django Course\env\Lib\site-packages\eventlet\hubs\selects.py", line 42, in wait
+    r, w, er = select.select(reader_fds, writer_fds, all_fds, seconds)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\C\Django Course\env\Lib\site-packages\celery\apps\worker.py", line 300, in _handle_request
+    callback(worker)
+  File "D:\C\Django Course\env\Lib\site-packages\celery\apps\worker.py", line 440, in on_SIGINT
+    safe_say('worker: Hitting Ctrl+C again will initiate cold shutdown, terminating all running tasks!',
+  File "D:\C\Django Course\env\Lib\site-packages\celery\apps\worker.py", line 82, in safe_say
+    os.write(f.fileno(), f'\n{msg}\n'.encode())
+  File "D:\C\Django Course\env\Lib\site-packages\eventlet\green\os.py", line 74, in write
+    hubs.trampoline(fd, write=True)
+  File "D:\C\Django Course\env\Lib\site-packages\eventlet\hubs\__init__.py", line 139, in trampoline
+    raise RuntimeError('do not call blocking functions from the mainloop')
+RuntimeError: do not call blocking functions from the mainloop

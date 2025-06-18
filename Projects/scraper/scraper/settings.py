@@ -82,13 +82,10 @@ DATABASES = {
         'PASSWORD': '1702',
         'HOST': 'localhost',
         'PORT': '',
-        'CONN_MAX_AGE': None,  # Use persistent connections
+        'CONN_MAX_AGE': 0,  # Close database connections after each request
         'OPTIONS': {
             'connect_timeout': 10,
-        },
-        'TEST': {
-            'NAME': 'test_scraper',
-        },
+        }
     }
 }
 
@@ -136,6 +133,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # Celery
+# Also you can use RabbitMQ as a broker
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 CELERY_ACCEPT_CONTENT = ['json']    

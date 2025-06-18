@@ -9,6 +9,8 @@ from django.core.cache import cache
 # For whole page caching
 from django.views.decorators.cache import cache_page
 
+from home.tasks import add
+
 
 
 # For whole page caching
@@ -16,6 +18,11 @@ from django.views.decorators.cache import cache_page
 # @cache_page(60 * 1)  # seconds * minutes 
 def index(request):
 
+    # result = add.delay(1, 2) # through celery task
+    result = add(1, 2) # through django task
+    print(result)
+
+    # FullText Search in django
     # FullText Search in django
     if search := request.GET.get('search'):
 

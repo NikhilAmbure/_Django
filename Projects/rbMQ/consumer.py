@@ -1,13 +1,25 @@
 # Consume the messsages produced by Producer
 
 import pika
+import pandas as pd
+import json
+import uuid
 
+def generateExcel(message):
+    message = json.loads(message)
+    df = pd.DataFrame(message)
+
+    # Generates only 1 file
+    # df.to_excel('output.xlsx', index=False)
+
+    # It generates multiple files for every output in queue
+    df.to_excel(f'output_{uuid.uuid4()}.xlsx', index=False)
 
 # output
 def callback(ch, method, properties, body):
     # print(ch, method, properties, body)
     message = body.decode()
-    print(message)
+    generateExcel(message)
 
 
 # Now, we have to bind this 'callback' function 

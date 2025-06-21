@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-time location tracking</title> 
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <strong></strong>
+</head>
+<body>
+
+    <h1>Real-time location tracking</h1>
+
+    <div class="h-150 w-300" id="map">
+         <script>   
+            var map;
+            var marker;
+            
+            function initMap(){
+                var initialLocation = {lat : 19.07, long : 72.877}
+                map = new google.maps.Map(document.getElementById('map'), {
+                    zoom: 10,
+                    center : initialLocation,
+                    restriction : {
+                        latLngBounds : {
+                            north : 20.0,
+                            south : 18.0,
+                            east : 73.9,
+                            west : 72.7
+                        },
+                        strictBounds : false
+                    }
+                })
+                marker = new google.maps.Marker({   
+                        position : initialLocation,
+                        map : map
+                    })
+                    updateLocation();
+            }
+
+            function updateLocation(){
+                fetch('/data/').then(response => response.json()).then(data => {
+                    var newLocation = {
+                        lat : data.latitude,
+                        lng : data.longitude
+                    }
+                    marker.setPosition(newLocation)
+                    map.setCenter(newLocation)
+                })  
+                setTimeout(updateLocation, 2000)
+            }
+
+            window.onload = initMap
+         </script>
+    </div>
+
+</body>
+</html>

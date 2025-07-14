@@ -1,5 +1,10 @@
 # Using kafka
+# We are doing this : When users like the posts it will get into the kafka queue (at line 56),
+#  when total_msgs in queue = 10 then the like_count of post will be increment with +10 by calling the processBatch()..
 
+# So you can also change the no.of total_msgs or likes u want to increment at a time 
+# like, if u want to refresh the like_count after 100 users likes then use (total_msgs >= 100)
+# so it will increment the post likes with +100 when the kafka_queue gets the 100 messages
 from django.core.management.base import BaseCommand
 from confluent_kafka import Consumer
 import os

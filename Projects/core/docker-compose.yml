@@ -4,10 +4,15 @@ services:
   db:
     image: postgres:13
     volumes:  
-      - postgres_data: /var/lib/postgresql/data/
+      - postgres_data:/var/lib/postgresql/data/
 
   web:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      -
+      - .:/core/
+    ports:
+      - "8000:8000"
+
+volumes:
+  postgres_data:

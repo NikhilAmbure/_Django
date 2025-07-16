@@ -6,7 +6,7 @@ ENV PYTHONUNBUFFERED=1
 #prevents python from buffering print statements or loggers
 
 # working directory
-WORKDIR /code
+WORKDIR /core
 
 COPY requirements.txt /core/
 RUN pip install --no-cache-dir -r requirements.txt

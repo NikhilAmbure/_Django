@@ -44,7 +44,7 @@ locust==2.37.10
 locust-cloud==1.23.2
 MarkupSafe==3.0.2
 msgpack==1.1.1
-numpy==2.3.0
+numpy==1.26.4
 openpyxl==3.1.5
 packaging==25.0
 pandas==2.3.0

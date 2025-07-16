@@ -14,3 +14,24 @@ from django.core.asgi import get_asgi_application
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'realtime.settings')
 
 application = get_asgi_application()
+
+
+# For routing by using asgi server
+from channels.routing import ProtocolTypeRouter, URLRouter
+from django.urls import path
+from home.consumer import mainConsumer
+
+
+# websocket (ws_pattern) for url routing
+ws_pattern = [
+    path("ws/main/", mainConsumer),
+]
+
+application = ProtocolTypeRouter({
+   
+    # WebSocket chat handler
+    "websocket": ((
+            URLRouter(ws_pattern)
+        )
+    ),
+})

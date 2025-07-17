@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Orders</title>
+</head>
+<body>
+  <div class="container mx-auto mt-5 pt-5 max-w-md px-4">
+    <h3 class="text-lg font-semibold mb-2">Order ID - {{ order.order_id }}</h3>
+    <p class="mb-4">Amount - ₹ {{ order.amount }}</p>
+
+    <!-- Status badge -->
+    <span
+      id="status"
+      class="inline-block px-3 py-1 rounded-full text-white text-sm font-semibold bg-blue-600"
+    >
+      {{ order.status }}
+    </span>
+
+    <!-- Progress bar container -->
+    <div class="w-full bg-gray-300 rounded-full h-5 mt-4 overflow-hidden">
+      <div
+        class="h-5 rounded-full transition-all duration-500 ease-in-out bg-blue-600"
+        id="progress-bar"
+        style="width: 10%"
+        role="progressbar"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        aria-valuenow="10"
+      ></div>
+    </div>
+  </div>
+
+  <script>
+
+    const status = "{{ order.status }}"; 
+
+  // Mapping of status to progress percentage
+  const statusToProgress = {
+    "Order Recieved": 10,
+    "Baking": 30,
+    "Baked": 50,
+    "Out of delivery": 75,
+    "Order Delivered": 100,
+  };
+  const progressValue = statusToProgress[status] || 0;
+
+  changeUI(progressValue, status);
+    
+    function changeUI(value, status) {
+        var progress_html = document.querySelector('#progress-bar');
+        var status_html = document.querySelector('#status');
+      
+        // Update status text
+        status_html.innerText = status;
+      
+        // Update progress bar width
+        progress_html.style.width = value + "%";
+        progress_html.setAttribute('aria-valuenow', value);
+      
+        // Optional: change color based on progress
+        if (value >= 100) {
+          progress_html.classList.remove('bg-blue-600');
+          progress_html.classList.add('bg-green-500');
+        } else if (value > 50) {
+          progress_html.classList.add('bg-yellow-500');
+        } else {
+          progress_html.classList.add('bg-blue-600');
+        }
+      }
+</script>
+</body>
+</html>

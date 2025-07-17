@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pizza App</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+    <header class="flex justify-between items-center bg-gray-600 h-20 mx-auto">
+        <div class=" text-white text-lg font-bold ml-10">
+            <h4>Pizza App</h4>
+        </div>
+    </header>
+
+  <div class="mt-10 max-w-7xl mx-auto px-4 grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+    {% for pizza in pizzas %}
+    <div class="bg-white rounded-2xl shadow-lg p-4">
+      <img src="{{ pizza.image.url }}" alt="{{ pizza.name }}" class="rounded-xl w-full h-48 object-cover mb-4" />
+      <h2 class="text-xl font-semibold text-gray-800 mb-2">{{ pizza.name }}</h2>
+      <p class="text-lg text-green-600 font-medium mb-4">₹{{ pizza.price }}</p>
+      <a href="/order_pizza/{{ pizza.id }}/" class="block text-center w-full bg-blue-600 text-white py-2 px-4 rounded-xl hover:bg-blue-700 transition duration-300">
+        Add to Cart
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+
+  
+  <div class="flex justify-center items-center mt-20 bg-gray-600 text-white px-6 py-4 ml-10 mr-10">
+    <h2 class="text-xl font-bold">All Orders</h2>
+  </div>
+
+  <div class="grid grid-cols-5 gap-6 ml-10 mr-10 mt-10 text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
+    <div class="font-bold text-center">Pizza</div>
+    <div class="font-bold text-center">Created At</div>
+    <div class="font-bold text-center">Status</div> 
+    <div class="font-bold text-center">Amount</div>
+    <div class="font-bold text-center">Action</div>
+  
+    {% for order in orders %}
+    <div class="bg-gray-100 text-center py-3 rounded">{{ order.order_id }}</div>
+    <div class="bg-gray-100 text-center py-3 rounded">{{ order.created_at }}</div>
+    <div class="bg-gray-100 text-center py-3 rounded text-blue">{{ order.status }}</div>
+    <div class="bg-gray-100 text-center py-3 rounded">₹{{ order.amount }}</div>
+    <div class="bg-gray-100 flex justify-center items-center py-3 rounded">
+      <a href="/{{ order.order_id }}" class="bg-red-400 text-white py-1 px-4 rounded hover:bg-red-700 transition">
+        View
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+  
+  
+</body>
+</html>

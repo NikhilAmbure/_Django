@@ -10,7 +10,7 @@ def index(request):
     return render(request, 'index.html', context = {'pizzas': pizzas, 'orders':orders})
 
 def order(request, order_id):
-    order = Order.objects.get(order_id = order_id)
+    order = Order.objects.get(order_id=order_id)
     return render(request, 'order.html', context={"order": order})
 
 def order_pizza(request, pizza_id):

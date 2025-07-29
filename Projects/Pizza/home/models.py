@@ -75,9 +75,11 @@ class Order(models.Model):
 
 # Signal for sending the real-time updated data to frontend
 @receiver(post_save, sender=Order)
+# Listens for when an Order object is saved.
+# created => is a boolean, True if this is a new order (just created), False if updated.
 def order_status_handler(sender, instance, created, **kwargs):
 
-    # When order status is updated
+    # We only want to act when the order is updated, not on creation.
     if not created:
         channel_layer = get_channel_layer()
         data = {
@@ -89,11 +91,12 @@ def order_status_handler(sender, instance, created, **kwargs):
         }
 
         # ***************************************
-        # sending above data to frontend
-        # Now we want to send the data to their correct order_id group
-        # Every order_id has its own room/group
-
-        # Why asyntosync -> sends the requests in queue(Redis)
+        # This sends a message to the group named for this order — e.g., order_123.
+        # All WebSocket consumers subscribed to this group (like the one in your consumer class) will receive this message.
+        # The "type": "order_status" means the Channels layer 
+        # will call the order_status method on those consumers (exactly like the method you wrote).
+        
+        # async_to_sync is used because group_send is async, but this signal handler runs synchronously.
         async_to_sync(channel_layer.group_send)(
             f'order_{instance.order_id}',{
                 "type": "order_status",

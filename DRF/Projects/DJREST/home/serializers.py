@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Student, Book
-
+from datetime import datetime
 
 
 # Model Serializer
@@ -14,6 +14,56 @@ class StudentSerializer(serializers.ModelSerializer):
         # Or if u want to exclude only 1 field from model then 
         # it sends all other fields except "phone"
         # exclude = ["phone"]
+
+
+    # Calculating student's age by dob
+    def calculate_age(self, date_of_birth):
+        current_date = datetime.now()
+
+        age = current_date.year - date_of_birth.year
+        return age
+
+    def to_representation(self, instance):
+        # Gives us all the data
+        data = super().to_representation(instance)
+        data['age'] = self.calculate_age(instance.dob)
+        return data
+    
+    def create(self, validated_data):
+        student = Student.objects.create(**validated_data)
+        # Adds 5 zeros
+        student.student_id = f"STU-{str(student.id).zfill(5)}"
+        student.save()
+        return student
+    
+    
+    def get_fields(self):
+        fields = super().get_fields()
+        print(fields)
+
+        # Consider 
+        authenticated = True
+        if authenticated:
+            # Removing the email (when we send data with email, it'll not receive the email)
+            fields.pop('email', None)
+            fields.pop('phone', None)
+
+        return fields
+    
+    
+    # ****************
+    # when you want to customize how incoming data 
+    # (e.g., from a POST or PUT request) is validated and converted 
+    # into Python-native types that can be used to create or update model instances.
+    def to_internal_value(self, data):
+        # print(data) # Use POST in postman
+        data = super().to_internal_value(data)
+        if 'name' in data:
+            # It will remove the extra spaces from name
+            data['name'] = data['name'].strip().title()
+            print(data)
+
+        return super().to_internal_value(data)
 
 
 

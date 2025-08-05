@@ -1,7 +1,7 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import Student
-from .serializers import StudentSerializer
+from .serializers import *
 
 # Also u can use one api for all the methods following
 
@@ -154,4 +154,44 @@ def delete_record(request, id):
     return Response({
         "status": True,
         "message": "Record deleted successfully"
+    })
+
+
+# Custom serializer
+@api_view(['POST'])
+def create_book(request):
+
+    data = request.data
+    serializer = BookSerializer(data = data)
+
+    # If False -> Error
+    if not serializer.is_valid():
+        return Response({
+            "status": False,
+            "message": "Record not created",
+            "errors": serializer.errors
+        })
+    
+    print(serializer.validated_data )
+
+    # Write ur custom save/create method in serializer.py
+    serializer.save()
+
+    return Response({
+        "status": True, 
+        "message": "Record created successfully",
+        "data": serializer.data
+    })
+
+
+@api_view(['GET'])
+def get_book(request):
+
+    queryset = Book.objects.all()
+    serializer = BookSerializer(queryset, many = True)
+
+    return Response({
+        "status": True, 
+        "message": "Record created successfully",
+        "data": serializer.data
     })

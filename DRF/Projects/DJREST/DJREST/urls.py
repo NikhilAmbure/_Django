@@ -24,5 +24,7 @@ urlpatterns = [
     path('api/update_record/', update_record),
     path('api/get_all_records/', get_all_records),
     path('api/delete_record/<id>/', delete_record),
+    path('api/create_book/', create_book,),
+    path('api/get_book/', get_book,),
     path('admin/', admin.site.urls),
 ]

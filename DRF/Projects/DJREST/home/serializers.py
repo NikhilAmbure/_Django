@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Student, Book
+from .models import *
 from datetime import datetime
 from rest_framework.validators import UniqueValidator
 from .validators import no_numbers
@@ -186,3 +186,57 @@ class UserSerializer(serializers.Serializer):
     #     return value
 
 
+
+# *************Nested Serializer Advance**************
+class AuthorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Author
+        fields = ['name']
+
+
+class PublisherSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Publisher
+        fields = '__all__'
+
+class NewBookSerializer(serializers.ModelSerializer):
+
+    # It uses foreign key in models
+    book_author = AuthorSerializer()
+
+    # ManytoMany field
+    publisher = PublisherSerializer(many = True)
+
+    class Meta:
+        model = Book
+        fields = '__all__'
+
+
+    # Instead of writing the CreateBookSerializer
+    # Override the create method
+    def create(self, validated_data):
+        author_data = validated_data.pop('book_author')
+        publisher_data = validated_data.pop('publisher')
+
+        # creating data
+        author, _ = Author.objects.get_or_create(**author_data)
+        book = Book.objects.create(book_author=author, **validated_data)
+        for pub in publisher_data:
+            pub,_ = Publisher.objects.get_or_create(**pub)
+            book.publisher.add(pub)
+        
+        return book
+        
+
+
+class CreateBookSerializer(serializers.ModelSerializer):
+
+    # Takes only valid data
+    # And we can use the filter() for getting author by their 'id'
+    book_author = serializers.PrimaryKeyRelatedField(queryset = Author.objects.all())
+    
+    publisher = serializers.PrimaryKeyRelatedField(queryset = Publisher.objects.all(), many=True)
+
+    class Meta:                 
+        model = Book
+        fields = '__all__'

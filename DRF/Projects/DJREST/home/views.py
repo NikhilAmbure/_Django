@@ -162,7 +162,11 @@ def delete_record(request, id):
 def create_book(request):
 
     data = request.data
-    serializer = BookSerializer(data = data)
+    # serializer = BookSerializer(data = data)
+
+    # For CreateBook or NewBookSerializer
+    serializer = NewBookSerializer(data=data)
+    # serializer = CreateBookSerializer(data = data)
 
     # If False -> Error
     if not serializer.is_valid():
@@ -188,7 +192,10 @@ def create_book(request):
 def get_book(request):
 
     queryset = Book.objects.all()
-    serializer = BookSerializer(queryset, many = True)
+    # serializer = BookSerializer(queryset, many = True)
+
+    # for NewBookSerializer (Author, Publisher, Book)
+    serializer = NewBookSerializer(queryset, many = True)
 
     return Response({
         "status": True, 

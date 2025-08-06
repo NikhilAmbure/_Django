@@ -26,5 +26,6 @@ urlpatterns = [
     path('api/delete_record/<id>/', delete_record),
     path('api/create_book/', create_book,),
     path('api/get_book/', get_book,),
+    path('api/create_user/', create_user,),
     path('admin/', admin.site.urls),
 ]

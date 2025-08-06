@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from .models import Student, Book
 from datetime import datetime
-
+from rest_framework.validators import UniqueValidator
+from .validators import no_numbers
 
 # Model Serializer
 class StudentSerializer(serializers.ModelSerializer):
@@ -23,11 +24,15 @@ class StudentSerializer(serializers.ModelSerializer):
         age = current_date.year - date_of_birth.year
         return age
 
+
+    # Overrides how an object is serialized to JSON (outbound).
+    # This allows complete control over the serialized output.
     def to_representation(self, instance):
         # Gives us all the data
         data = super().to_representation(instance)
         data['age'] = self.calculate_age(instance.dob)
         return data
+    
     
     def create(self, validated_data):
         student = Student.objects.create(**validated_data)
@@ -55,6 +60,7 @@ class StudentSerializer(serializers.ModelSerializer):
     # when you want to customize how incoming data 
     # (e.g., from a POST or PUT request) is validated and converted 
     # into Python-native types that can be used to create or update model instances.
+    # -> Use this when you need custom validation or transformation on input data before saving.
     def to_internal_value(self, data):
         # print(data) # Use POST in postman
         data = super().to_internal_value(data)
@@ -70,7 +76,13 @@ class StudentSerializer(serializers.ModelSerializer):
 # Basic Serializer / custom Method
 # No need to write class Meta and its fields (write manually)
 class BookSerializer(serializers.Serializer):
-    book_title = serializers.CharField(max_length=100)
+    # *******UniqueValidator******
+    # Same title of the book will not come
+    book_title = serializers.CharField(
+        max_length=100,
+        validators = [
+            UniqueValidator(queryset=Book.objects.all())
+        ])
     book_author = serializers.CharField(max_length=100)
     price = serializers.IntegerField()
     TAX_PRICE = 18
@@ -111,3 +123,66 @@ class BookSerializer(serializers.Serializer):
         instance.save()
 
         return instance
+
+
+# For nested serializer(Used this in Userserializer)
+class AddressSerializer(serializers.Serializer):
+    city = serializers.CharField(max_length=100)
+    postal_code = serializers.CharField(max_length=100)
+
+    def validate_postal_code(self, value):
+        if not value.isdigit():
+            raise serializers.ValidationError("Postal_code must contain digits")
+        return value
+    
+
+# Advance serializer validation
+class UserSerializer(serializers.Serializer):
+    # Custom validator (validators.py)
+    name = serializers.CharField(
+        max_length=100,
+        validators = [no_numbers] 
+        )
+    email = serializers.EmailField()
+    age = serializers.IntegerField()
+    # Generate regex for indian phone_number from gpt 
+    # Also, can pass the custom error_messages 
+    phone_number = serializers.RegexField(
+        regex=r'^(?:\+91[-\s]?|0)?[6-9]\d{9}$',
+        error_messages = { 'invalid': 'Phone number be entered correctly'}
+    )
+
+    # Nested Serializer
+    address = AddressSerializer()
+    
+    # Dynamic
+    user_type = serializers.ChoiceField(choices=['admin', 'regular'])
+    admin_code = serializers.CharField(required = False)
+
+    # Instead of writing the separate validation for fields
+    # Multiple validation 
+    def validate(self, data): 
+        print(data)
+        if 'age' in data and data['age'] < 18 or data['age'] > 30:
+            raise serializers.ValidationError("Age must be greater than 18 and less than 30")
+
+        # Dynamic
+        if data['user_type'] == 'admin' and not data.get('admin_code'):
+            raise serializers.ValidationError("Admin code is required.")
+        
+        return super().validate(data)
+
+
+
+    # validate_<field_name>:
+    # def validate_age(self, value):
+    #     if value < 18 or value > 30:
+    #         raise serializers.ValidationError("Age must be greater than 18 and less than 30")
+    #     return value
+    
+    # def validate_email(self, value):
+    #     if value.split('@')[1] == "gmail.com":
+    #         raise serializers.ValidationError("Must be a business email")
+    #     return value
+
+

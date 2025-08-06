@@ -195,3 +195,28 @@ def get_book(request):
         "message": "Record created successfully",
         "data": serializer.data
     })
+
+
+
+@api_view(['POST'])
+def create_user(request):
+
+    data = request.data
+    serializer = UserSerializer(data = data)
+
+    # If False -> Error
+    # Basic Data validation (By DRF default validation method )
+    if not serializer.is_valid():
+        return Response({
+            "status": False,
+            "message": "Record not created",
+            "errors": serializer.errors
+        })
+    
+    print(serializer.validated_data)
+
+    return Response({
+        "status": True, 
+        "message": "Record created successfully",
+        "data": serializer.data
+    })

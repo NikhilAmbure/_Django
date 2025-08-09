@@ -5,9 +5,55 @@ from .serializers import *
 from rest_framework.views import APIView
 from rest_framework.mixins import ListModelMixin, CreateModelMixin
 from rest_framework.generics import GenericAPIView
+from rest_framework import generics
+from rest_framework import viewsets
+from rest_framework.decorators import action
 
 
-# Mixins + GenericAPI View class
+
+# Model ViewSets (Easy for CRUD)
+# And 'action' for performing other logic of the application like, sending an email , notification, etc...
+class ProductViewset(viewsets.ModelViewSet):
+    # All CRUD will be done in following two lines
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+
+    # **********************************
+    # action (It's an a api => 'products/v2/export_products/' as a route)
+    # detail = True -> def export_products(self, req, pk)
+    # else detail = False (no 'pk' is passed)
+    @action(detail=False, methods=['POST'])
+    def export_products(self, request):
+        return Response({
+            "status": True,
+            "message": "file exported",
+            "data": {}
+        })
+    
+
+    # So, route will be like , => 'products/v2/1/send_email_product/' (where, 1 is a pk of an product)
+    @action(detail=True, methods=['POST'])
+    def send_email_product(self, request, pk):
+        print("Email Sent!!!", pk)
+        return Response({
+            "status": True,
+            "message": f"email sent to {pk}",
+            "data": {}
+        })
+
+
+
+
+
+# Concrete View Classes (CRUD)
+class ProductListCreate(generics.ListCreateAPIView, generics.DestroyAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    # By only above u can perform GET, POST, etc. in Postman (no need to write those manually )
+    # Buy u can modify those if u want to
+
+
+# Mixins + GenericAPI View class (CRUD)
 # 1) ListModelMixin
 # 2) CreateModelMixin
 # 3) UpdateModelMixin

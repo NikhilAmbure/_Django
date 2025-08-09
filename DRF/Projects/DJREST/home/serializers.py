@@ -4,6 +4,13 @@ from datetime import datetime
 from rest_framework.validators import UniqueValidator
 from .validators import no_numbers
 
+
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta: 
+        model = Product
+        fields = '__all__'
+
+
 # Model Serializer
 class StudentSerializer(serializers.ModelSerializer):
     

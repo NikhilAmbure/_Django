@@ -17,6 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from home.views import *
+from rest_framework.routers import DefaultRouter
+
+# For ModelViewsets
+router = DefaultRouter()
+router.register(r'products/v2', ProductViewset, basename='products')
 
 urlpatterns = [
     path('api/', index),
@@ -29,5 +34,8 @@ urlpatterns = [
     path('api/create_user/', create_user,),
     path('api/student/', StudentAPI.as_view()),
     path('api/v2/student/', StudentModelListView.as_view()),
+    path('api/products/', ProductListCreate.as_view()),
     path('admin/', admin.site.urls),
 ]
+
+urlpatterns += router.urls

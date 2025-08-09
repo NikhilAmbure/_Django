@@ -3,7 +3,38 @@ from rest_framework.response import Response
 from .models import Student
 from .serializers import *
 from rest_framework.views import APIView
+from rest_framework.mixins import ListModelMixin, CreateModelMixin
+from rest_framework.generics import GenericAPIView
 
+
+# Mixins + GenericAPI View class
+# 1) ListModelMixin
+# 2) CreateModelMixin
+# 3) UpdateModelMixin
+# 4) DestroyModelMixin
+class StudentModelListView(ListModelMixin, CreateModelMixin, GenericAPIView):
+
+    # You have to mention following two things here:
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
+
+    # Overriding the get() method
+    def get_queryset(self):
+        return Student.objects.filter(name__startwith = 'N')
+    
+    # Overriding the create method
+    # Gets called automatically when data is created
+    def perform_create(self, serializer):
+        return super().perform_create(serializer)
+
+    # ListModelMixin
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    # CreateModelMixin
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+    
 
 # APIView
 # Overrides the methods -> get, post, patch ,etc...

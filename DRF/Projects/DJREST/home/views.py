@@ -2,9 +2,50 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import Student
 from .serializers import *
+from rest_framework.views import APIView
 
+
+# APIView
+# Overrides the methods -> get, post, patch ,etc...
+class StudentAPI(APIView):
+    
+    def get(self, request):
+        queryset = Student.objects.all()
+        serializer = StudentSerializer(queryset, many=True)
+
+        return Response({
+            "status": True,
+            "message": "All records fetched successfully",
+            "data": serializer.data
+        })
+    
+    
+    def post(self, request):
+        data = request.data
+        serializer = StudentSerializer(data = data)
+
+        
+        if not serializer.is_valid():
+            return Response({
+                "status": False,
+                "message": "Record not created",
+                "errors": serializer.errors
+            })
+        
+        
+        serializer.save()
+
+        return Response({
+            "status": True, 
+            "message": "Record created successfully",
+            "data": serializer.data
+        })
+
+
+
+
+# Function based view (API)
 # Also u can use one api for all the methods following
-
 @api_view(['POST', 'GET', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'])
 def index(request):
     students = ["Abhijeet", "Nikhil", "Parle"]

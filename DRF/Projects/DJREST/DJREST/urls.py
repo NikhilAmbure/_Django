@@ -27,5 +27,6 @@ urlpatterns = [
     path('api/create_book/', create_book,),
     path('api/get_book/', get_book,),
     path('api/create_user/', create_user,),
+    path('api/student/', StudentAPI.as_view()),
     path('admin/', admin.site.urls),
 ]

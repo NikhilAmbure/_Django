@@ -8,6 +8,66 @@ from rest_framework.generics import GenericAPIView
 from rest_framework import generics
 from rest_framework import viewsets
 from rest_framework.decorators import action
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
+from rest_framework.authtoken.models import Token
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import TokenAuthentication
+
+
+# Token Authentication
+# 1) User Registration
+class RegisterAPI(APIView):
+    def post(self, request):
+        serializer = RegisterSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({
+                "status": True,
+                "message": "User registered succesfully",
+                "data": {}
+            })
+        
+        return Response({
+            "status": False,
+            "message": "missing keys",
+            "data": serializer.errors
+        })
+
+# 2) Login User 
+class LoginAPI(APIView):
+    def post(self, request):
+        serializer = LoginSerializer(data=request.data)
+
+        if serializer.is_valid():
+            user = authenticate(username = serializer.data['username'], password = serializer.data['password'])
+
+            if user is None:
+                return Response({
+                    "status": False,
+                    "message": "Invalid Credentials",
+                    "data": serializer.errors
+                }, status=401)
+            
+            # *********************
+            # else, User is correct 
+            # Generate the user token
+            token, created = Token.objects.get_or_create(user=user)
+            return Response({
+                "status": True,
+                "message": "User token",
+                "data": {
+                    "Token": token.key
+                }
+            })
+        
+        return Response({
+            "status": False,
+            "message": "Key missing",
+            "data": serializer.errors
+        })
+        
+        
 
 
 
@@ -51,6 +111,14 @@ class ProductListCreate(generics.ListCreateAPIView, generics.DestroyAPIView):
     serializer_class = ProductSerializer
     # By only above u can perform GET, POST, etc. in Postman (no need to write those manually )
     # Buy u can modify those if u want to
+
+    # ******Authentication permissions for protecting routes*****
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+    # if we want to see which user is sending request->
+    def list(self, request, *args, **kwargs):
+        print(request.user)
+        return super().list(request, *args, **kwargs)
 
 
 # Mixins + GenericAPI View class (CRUD)

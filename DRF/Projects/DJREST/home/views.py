@@ -11,8 +11,9 @@ from rest_framework.decorators import action
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser, IsAuthenticatedOrReadOnly
 from rest_framework.authentication import TokenAuthentication
+from .permissions import IsProductOwnerPermission, IsVipUserpermission
 
 
 # Token Authentication
@@ -77,6 +78,33 @@ class ProductViewset(viewsets.ModelViewSet):
     # All CRUD will be done in following two lines
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    authentication_classes = [TokenAuthentication]
+
+    # *************************
+    # Custom permissions ->  
+    # Now, we want to access only that product which the current user created 
+    # (i.e. Product that is created by current user can see only those products)
+    permission_classes = [IsAuthenticated, IsProductOwnerPermission, IsVipUserpermission]
+
+    # 2
+    # IsProductOwnerPermission -> Custom permissions
+    # Instead of writing following boiler plate, we can use custom permissions (permissions.py)
+    # def list(self, request,pk, *args, **kwargs):
+    #     product = Product.objects.get(id=pk)
+    #     if request.user != product.user:
+    #         return Response({
+    #             "message": "you are not the owner of this product"
+    #         })
+    #     return super().list(request, *args, **kwargs)
+    
+    # 2
+    # Use custom permissions here too --> "IsVipUserpermission"
+    # Now, for vip user can access that thing
+    # def list(self, request, *args, **kwargs):
+    #     if not request.user.extended.is_vip:
+    #         return Response("Invalid")
+    #     return super().list(request, *args, **kwargs)
+
 
     # **********************************
     # action (It's an a api => 'products/v2/export_products/' as a route)
@@ -134,7 +162,7 @@ class StudentModelListView(ListModelMixin, CreateModelMixin, GenericAPIView):
 
     # Overriding the get() method
     def get_queryset(self):
-        return Student.objects.filter(name__startwith = 'N')
+        return Student.objects.filter(name__startswith = 'N')
     
     # Overriding the create method
     # Gets called automatically when data is created
@@ -148,11 +176,17 @@ class StudentModelListView(ListModelMixin, CreateModelMixin, GenericAPIView):
     # CreateModelMixin
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
-    
+
+
+SAFMETHOD = ("GET", "HEAD", "OPTIONS")
 
 # APIView
 # Overrides the methods -> get, post, patch ,etc...
 class StudentAPI(APIView):
+
+    # permission_classes = [AllowAny]
+    # permission_classes = [IsAdminUser]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     
     def get(self, request):
         queryset = Student.objects.all()

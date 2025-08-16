@@ -14,6 +14,8 @@ from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser, IsAuthenticatedOrReadOnly
 from rest_framework.authentication import TokenAuthentication
 from .permissions import IsProductOwnerPermission, IsVipUserpermission
+from .paginate import StandardResultPagination, LargeResultPagination, CustomCursorPagination
+
 
 
 # Token Authentication
@@ -78,13 +80,21 @@ class ProductViewset(viewsets.ModelViewSet):
     # All CRUD will be done in following two lines
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    authentication_classes = [TokenAuthentication]
+    # authentication_classes = [TokenAuthentication]
 
     # *************************
     # Custom permissions ->  
     # Now, we want to access only that product which the current user created 
     # (i.e. Product that is created by current user can see only those products)
-    permission_classes = [IsAuthenticated, IsProductOwnerPermission, IsVipUserpermission]
+    # permission_classes = [IsAuthenticated, IsProductOwnerPermission, IsVipUserpermission]
+
+
+    # 1) PageNumberPagination
+    # Use pagination in viewset/mixins like this...->
+    # pagination_class = StandardResultPagination
+    
+    # 2) CursorPagination
+    pagination_class = CustomCursorPagination
 
     # 2
     # IsProductOwnerPermission -> Custom permissions
@@ -447,3 +457,21 @@ def create_user(request):
         "message": "Record created successfully",
         "data": serializer.data
     })
+
+
+# Pagination
+class AuthorAPI(APIView):
+    
+    def get(self, request):
+        authors = Author.objects.all()
+
+        # Declare following two variables
+        # paginator = StandardResultPagination()
+        paginator = LargeResultPagination()
+        paginated_results =  paginator.paginate_queryset(authors, request)
+
+        serializer = AuthorSerializer(paginated_results, many=True)
+         
+        return Response({
+            "data": paginator.get_paginated_response(serializer.data).data
+        })

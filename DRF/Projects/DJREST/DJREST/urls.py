@@ -37,6 +37,7 @@ urlpatterns = [
     path('api/products/', ProductListCreate.as_view()),
     path('api/register/', RegisterAPI.as_view()),
     path('api/login/', LoginAPI.as_view()),
+    path('api/author/', AuthorAPI.as_view()),
     path('admin/', admin.site.urls),
 ]
 

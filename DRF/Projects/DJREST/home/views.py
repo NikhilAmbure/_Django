@@ -14,7 +14,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser, IsAuthenticatedOrReadOnly
 from rest_framework.authentication import TokenAuthentication
 from .permissions import IsProductOwnerPermission, IsVipUserpermission
-from .paginate import StandardResultPagination, LargeResultPagination, CustomCursorPagination
+from .paginate import StandardResultPagination, LargeResultPagination, CustomCursorPagination, paginate
 
 
 
@@ -459,19 +459,31 @@ def create_user(request):
     })
 
 
+from django.core.paginator import Paginator
 # Pagination
 class AuthorAPI(APIView):
     
     def get(self, request):
         authors = Author.objects.all()
 
+        # 1) PageNumberPagination
         # Declare following two variables
         # paginator = StandardResultPagination()
-        paginator = LargeResultPagination()
-        paginated_results =  paginator.paginate_queryset(authors, request)
+        # paginator = LargeResultPagination()
+        # paginated_results =  paginator.paginate_queryset(authors, request)
+        # serializer = AuthorSerializer(paginated_results, many=True)
+        # return Response({
+        #     "data": paginator.get_paginated_response(serializer.data).data
+        # })
 
-        serializer = AuthorSerializer(paginated_results, many=True)
-         
-        return Response({
-            "data": paginator.get_paginated_response(serializer.data).data
-        })
+
+
+        # ***********CustomPagination***********
+        pagenumber = request.GET.get('page', 1)
+        paginator = Paginator(authors, 10) # 10 records
+        data = paginate(authors, paginator, pagenumber)
+
+        serializer = AuthorSerializer(data['results'], many=True)
+        data['results'] = serializer.data
+
+        return Response(data) 

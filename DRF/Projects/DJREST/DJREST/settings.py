@@ -131,3 +131,30 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # REST_FRAMEWORK = {
 #     'DEFAULT_PAGINATION_CLASS': 'home.paginate.StandardResultsPagination',
 # }
+
+
+
+# 1)-> Globally for all apis
+# globally -> for all the api's
+# REST_FRAMEWORK = {
+#     'DEFAULT_THROTTLE_CLASSES': [
+#         'rest_framework.throttling.AnonRateThrottle',
+#         'rest_framework.throttling.UserRateThrottle'
+#     ],
+#     'DEFAULT_THROTTLE_RATES': {
+#         'anon': '10/day',   # Anotate (anonymous user) => Per day only 10 requests per day can send the user
+#         'user': '10/day'    # Authenticate user => Per day only 10 requests per day can send the user
+#     }
+# }
+
+
+# ScopedThrottle
+REST_FRAMEWORK = {
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.ScopedRateThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'product': '10/day',  
+        'another_scope': '10/day'   
+    }
+}

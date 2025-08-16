@@ -15,6 +15,8 @@ from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser, I
 from rest_framework.authentication import TokenAuthentication
 from .permissions import IsProductOwnerPermission, IsVipUserpermission
 from .paginate import StandardResultPagination, LargeResultPagination, CustomCursorPagination, paginate
+from rest_framework.throttling import UserRateThrottle, ScopedRateThrottle
+from .throttle import CustomThrottle
 
 
 
@@ -95,6 +97,17 @@ class ProductViewset(viewsets.ModelViewSet):
     
     # 2) CursorPagination
     pagination_class = CustomCursorPagination
+
+
+    # Throttling
+    # throttle_classes  = [UserRateThrottle]
+
+    # Custom throttle (throttle.py)
+    # throttle_classes = [CustomThrottle]
+
+    # ScopedRateThrottle (Combination)
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = 'product'
 
     # 2
     # IsProductOwnerPermission -> Custom permissions
@@ -190,13 +203,21 @@ class StudentModelListView(ListModelMixin, CreateModelMixin, GenericAPIView):
 
 SAFMETHOD = ("GET", "HEAD", "OPTIONS")
 
+
 # APIView
 # Overrides the methods -> get, post, patch ,etc...
+
+# Throttle class for APIView
+# @throttle_classes([UserRateThrottle])
 class StudentAPI(APIView):
 
     # permission_classes = [AllowAny]
     # permission_classes = [IsAdminUser]
     permission_classes = [IsAuthenticatedOrReadOnly]
+    
+    # ScopedRateThrottle (Combination)
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = 'product'
     
     def get(self, request):
         queryset = Student.objects.all()
